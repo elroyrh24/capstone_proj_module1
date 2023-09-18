@@ -91,36 +91,20 @@ def FindAdvanced(database, dataval, id):
 
         #Starts find process if data appears once
         if found:
+                for i, v in list(database.items()):
 
-                #Process if data inputted is a string
-                if type(dataval) != int:
-                        for i, v in list(database.items()):
+                        #Adds header
+                        if i == "column":
+                                resultList.update({"column": v})
+                                continue
 
-                                #Adds header
-                                if i == "column":
-                                        resultList.update({"column": v})
-                                        continue
+                        #Adds data matching user input (but without making it a string)
+                        if v[id] == dataval:
+                                resultList.update({i : v})
 
-                                #Adds data matching user input
-                                if v[id] == (f"{dataval}"):
-                                        resultList.update({i : v})
-                                        resultHeader = resultList["column"]
-                                        resultData = list(resultList.values())[1:]
-
-                #Process if data inputted is NOT a string
-                else:
-                        for i, v in list(database.items()):
-
-                                #Adds header
-                                if i == "column":
-                                        resultList.update({"column": v})
-                                        continue
-
-                                #Adds data matching user input (but without making it a string)
-                                if v[id] == dataval:
-                                        resultList.update({i : v})
-                                        resultHeader = resultList["column"]
-                                        resultData = list(resultList.values())[1:]
+                #Defines data and header of result table
+                resultHeader = resultList["column"]
+                resultData = list(resultList.values())[1:]
 
                 #Prints the table of records matching the user input
                 print(tbt.tabulate(resultData,resultHeader,tablefmt="outline"))
@@ -153,7 +137,7 @@ def Find(database):
                 ),id = 1)
 
         if findAsk == 3:
-                headerFind, dataFind = FindAdvanced(database, dataval =pyi.inputStr(
+                FindAdvanced(database, dataval =pyi.inputStr(
                         prompt="Enter the name of the job title you want to find (with spaces): ",
                         applyFunc = lambda x: x.title(),
                 ),id = 2)
