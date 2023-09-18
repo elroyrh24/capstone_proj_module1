@@ -1,0 +1,4 @@
+PyInputPlus==0.2.12
+tabulate==0.9.0
+wheel==0.41.2
+pyinstaller==5.13.2
