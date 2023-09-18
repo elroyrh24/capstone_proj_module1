@@ -7,3 +7,6 @@ The Generic X Company application was released in 2023 to help companies allocat
 3. Delete database, X Company DataApp gives you the option to cleanly remove entire records from your database.
 4. Update database, X Company DataApp enables you to keep your data up-to-date and can even modify multiple records at once, providing extra convenience and speed.
 
+# Installation
+
+# Project Directory Structure
