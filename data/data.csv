@@ -4,12 +4,12 @@ Index;ProjectName;ProjectRole;FirstName;LastName;Sex;Age
 2;Fruit Market;Project Manager;Jill;Boe;F;34
 3;Clothing Corp;Project Manager;Bill;Tolls;M;28
 4;Clothing Corp;Senior Engineer;Bron;Toe;M;20
-5;Leave;Senior Engineer;Steve;Jobs;M;35
+5;N/A;Senior Engineer;Steve;Jobs;M;35
 6;Leave;Junior Engineer;Eva;Banks;F;19
 7;Fruit Market;Junior Engineer;Bo;Koen;M;18
 8;Clothing Corp;Junior Engineer;Grady;Brady;M;20
-9;Leave;Senior Engineer;Melissa;Banks;F;23
-10;Clothing Corp;Junior Engineer;John;Boe;M;29
+9;N/A;Junior Engineer;Melissa;Banks;F;23
+10;Fruit Market;Junior Engineer;John;Boe;M;29
 11;Clothing Corp;Junior Engineer;Jill;Boe;F;20
-12;Leave;Junior Engineer;Levin;Taylor;M;21
-13;Leave;Junior Engineer;Mandy;Randy;F;30
+12;N/A;Junior Engineer;Levin;Taylor;M;22
+13;N/A;Junior Engineer;Mandy;Randy;F;30
