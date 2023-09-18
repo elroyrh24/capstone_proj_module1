@@ -100,9 +100,13 @@ def mainMenu():
             while True:
                 #Asks if user wants to go back to main menu everytime a function ends
                 backToMainMenu = pyi.inputYesNo(prompt='\nBack to the main menu? (yes/no): ')
+                
+                #If they do, stop the function and go back to main menu
                 if backToMainMenu == 'yes':
                     clear_screen()
                     break
+
+                #If they dont, run the function again
                 else:
                     clear_screen()
                     eval(f'ef.{menu}(db)')
