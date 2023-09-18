@@ -62,6 +62,14 @@ addPrompt='''
 2. Cancel
 ==========================================================
 '''
+delPrompt='''
+==========================================================
+                       Delete Menu
+==========================================================
+1. Delete a record
+2. Cancel
+==========================================================
+'''
 
 def Show_All(database, title='\nList of Employees\n'):
         """
@@ -74,7 +82,7 @@ def Show_All(database, title='\nList of Employees\n'):
 
             
         """
-        if len(database) > 0:
+        if len(database) > 1:
                 #Get header data
                 column_data = database.get("column", [])
                 filtered_dict = {key: value for key, value in database.items() if key != "column"}
@@ -93,7 +101,7 @@ def Show_All(database, title='\nList of Employees\n'):
                 print(tbt.tabulate(data,header, tablefmt='outline'))
                 print('\n')
         else:
-                print("Database not found.")
+                print("No data in database.")
         
 
 
@@ -253,7 +261,7 @@ def Add(database):
         if addPreCheck == 1:
 
                 #Automatically determines Employee ID
-                Emp_ID = pyi.inputInt(prompt="Enter the ID of the employee: ",min=0)
+                Emp_ID = pyi.inputInt(prompt="Enter the ID of the employee: ",min=0,max=9999)
                 if Emp_ID in id_list:
                         print("Employee ID is already being used.")
                 else:   
@@ -323,37 +331,49 @@ def Delete(database):
         #Shows user the database 
         Show_All(database)
 
-        #Asks user for which record to delete with their Emp_ID
-        targetID = pyi.inputInt(prompt="Enter the employee ID of the record you want to remove: ",max=(len(database)-2))
+        print(delPrompt)
+        delMenu = pyi.inputInt(prompt="Do you want to delete a record from the database? (number): ")
 
-        #If the index is actually valid, proceeds
-        if targetID <= len(database)-2:
 
-                #Shows record that is to be deleted
-                print(database[targetID])
+        if delMenu == 1:
+                id_list = []
+                for idx, vals in list(database.items()):
+                        if idx == "column":
+                                continue
+                        elif vals[0] not in id_list:
+                                id_list.append(vals[0])
 
-                #Makes sure user wants to delete the record
-                removeCheck = pyi.inputYesNo(prompt="Are you sure you want to remove this record? (yes/no): ")
+                #Asks user for which record to delete with their Emp_ID
+                targetID = pyi.inputInt(prompt="Enter the employee ID of the record you want to remove: ",max=9999)
 
-                #If they do...
-                if removeCheck == 'yes':
+                #If the index is actually valid, proceeds
+                if targetID in id_list:
 
-                        #Iterate through the database
-                        for idx, val in list(database.items()):
-                                #Skip the header
-                                if idx == "column":
-                                        continue
+                        #Shows record that is to be deleted
+                        print(database[targetID])
+
+                        #Makes sure user wants to delete the record
+                        removeCheck = pyi.inputYesNo(prompt="Are you sure you want to remove this record? (yes/no): ")
+
+                        #If they do...
+                        if removeCheck == 'yes':
+
+                                #Iterate through the database
+                                for idx, val in list(database.items()):
+                                        #Skip the header
+                                        if idx == "column":
+                                                continue
                                 
-                                #Delete the data matching the index
-                                if targetID == val[0]:
-                                        del database[idx]
+                                        #Delete the data matching the index
+                                        if targetID == val[0]:
+                                                del database[idx]
 
-                        #Shows database after deletion
-                        Show_All(database)
-        #If data isnt actually valid
-        else:
-                #Returns prompt informing user the employee ID is invalid
-                print(f"Record with Emp_ID of {targetID} is not in the database.")
+                                #Shows database after deletion
+                                Show_All(database)
+                #If data isnt actually valid
+                else:
+                        #Returns prompt informing user the employee ID is invalid
+                        print(f"Record with Emp_ID of {targetID} is not in the database.")
 
 def specificUpdate(database):
         """
