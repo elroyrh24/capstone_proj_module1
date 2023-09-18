@@ -29,8 +29,6 @@ Now you can run it through the following command:
     │
     ├── data               <- Employee database
     │
-    ├── docs               <- PPT
-    │
     ├── src                <- Source code for this app
     │
     ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
