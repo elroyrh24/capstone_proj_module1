@@ -14,13 +14,13 @@ The Generic X Company application was released in 2023 to help companies allocat
 
 
 
-    ├── README.md          <- The top-level README for developers using this project.
+    ├── README.md          <- Top level README
     │
-    ├── data               <- Fruit & vegetable database
+    ├── data               <- Employee database
     │
-    ├── docs               <- The document will consist of a detailed presentation.
+    ├── docs               <- PPT
     │
-    ├── src                <- Source code for use in this project.
+    ├── src                <- Source code for this app
     │
     ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
     │                         generated with `pip freeze > requirements.txt`
