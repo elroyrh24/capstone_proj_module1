@@ -9,4 +9,18 @@ The Generic X Company application was released in 2023 to help companies allocat
 
 ## Installation
 
+
 ## Project Directory Structure
+
+    ├── README.md          <- The top-level README for developers using this project.
+    │
+    ├── data               <- Fruit & vegetable database
+    │
+    ├── docs               <- The document will consist of a detailed presentation.
+    │
+    ├── src                <- Source code for use in this project.
+    │
+    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
+    │                         generated with `pip freeze > requirements.txt`
+    │
+    └── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
