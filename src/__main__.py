@@ -9,12 +9,11 @@ preMenuPrompt = '''
 ==========================================================
      Welcome to the Generic Company Employee Database 
 ==========================================================
-1. Show the full database
-2. Find specific records from database
-3. Add a new record to the database
-4. Delete a record from the database
-5. Update a record from the database
-6. Exit the company database
+1. Show the database
+2. Add a new record to the database
+3. Delete a record from the database
+4. Update a record from the database
+5. Exit the company database
 ==========================================================
 '''
 #Prompt for main menu 
@@ -52,8 +51,8 @@ def start_db():
 
         #Adds every row to dictionary with loop
         for row in dbReader:
-            Index, Project_Name, Job_Title, FirstName,LastName, Sex, Age = row
-            database.update({int(Index): [int(Index), Project_Name, Job_Title, FirstName,LastName, Sex, int(Age)]})
+            Emp_ID, Project_Name, Job_Title, FirstName,LastName, Sex, Age = row
+            database.update({int(Emp_ID): [int(Emp_ID), Project_Name, Job_Title, FirstName,LastName, Sex, int(Age)]})
 
         #Returns the database to be used
         return database
@@ -77,7 +76,7 @@ def mainMenu():
         print(preMenuPrompt)
         menu = pyi.inputInt(prompt=menuPrompt, min=1, max=6)
         #Checks if user exits
-        if menu == 6:
+        if menu == 5:
             break
         else:
             #Executes choice by user 
@@ -85,15 +84,12 @@ def mainMenu():
                 menu = 'Show'
                 ef.Show(db)
             if menu == 2:
-                menu = 'Find'
-                ef.Find(db)
-            if menu == 3:
                 menu = 'Add'
                 ef.Add(db)
-            if menu == 4:
+            if menu == 3:
                 menu = 'Delete'
                 ef.Delete(db)
-            if menu == 5:
+            if menu == 4:
                 menu = 'Update'
                 ef.Update(db)
 

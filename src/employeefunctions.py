@@ -3,9 +3,18 @@ import pyinputplus as pyi
 
 
 #Prompts for functions
+showMenuPrompt='''
+==========================================================
+                       Show Menu 
+==========================================================
+1. Show the entire database
+2. Find specific records
+3. Cancel
+==========================================================
+'''
 updateMenuPrompt='''
 ==========================================================
-                       Update Menu 
+                      Update Menu 
 ==========================================================
 1. Field 
 2. Row
@@ -35,7 +44,7 @@ findPrompt='''
 ==========================================================
                   List of Findable Values
 ==========================================================
-1. Index
+1. Emp_ID
 2. Project_Name
 3. Job_Title
 4. First Name
@@ -45,7 +54,16 @@ findPrompt='''
 8. Cancel
 ==========================================================
 '''
-def Show(database, title='\nList of Employees\n'):
+addPrompt='''
+==========================================================
+                        Add Menu
+==========================================================
+1. Add a new record
+2. Cancel
+==========================================================
+'''
+
+def Show_All(database, title='\nList of Employees\n'):
         """
 
         Args:
@@ -56,17 +74,28 @@ def Show(database, title='\nList of Employees\n'):
 
             
         """
+        if len(database) > 0:
+                #Get header data
+                column_data = database.get("column", [])
+                filtered_dict = {key: value for key, value in database.items() if key != "column"}
+        
+                #Sorts by Emp_ID
+                sorted_data = dict(sorted(filtered_dict.items(), key=lambda item: item[1][0], reverse=False))
 
-        #Shows title of table
-        print(title)
+                #Merge header and sorted data
+                sorted_database = {"column": column_data, **sorted_data}
 
-        #Defines header and data of table
-        data = list(database.values())[1:]
-        header = database['column']
+                #Define header and data for table
+                data = list(sorted_database.values())[1:]
+                header = sorted_database['column']
 
-        #Actually prints the table
-        print(tbt.tabulate(data,header, tablefmt='outline'))
-        print('\n')
+                #Actually prints the table
+                print(tbt.tabulate(data,header, tablefmt='outline'))
+                print('\n')
+        else:
+                print("Database not found.")
+        
+
 
 def FindAdvanced(database, dataval, id):
 
@@ -136,10 +165,10 @@ def Find(database):
 
         #Inputs necessary data for the actual find function
 
-        #Index
+        #Emp_ID
         if findAsk == 1:
                 FindAdvanced(database, dataval =pyi.inputInt(
-                        prompt="Enter the index number of the employee record you want to find: "
+                        prompt="Enter the ID number of the employee record you want to find: "
                 ),id = 0)
 
         #Project
@@ -185,10 +214,21 @@ def Find(database):
                 FindAdvanced(database, dataval =pyi.inputInt(
                         prompt="Enter the age of the employees you want to find: "
                 ),id = 6)
+        
+        elif findAsk == 8:
+                Show(database)
 
         #If user picks cancel which is 8, function ends and goes back to the prompt asking if they want to go back to the main menu.
 
-        
+def Show(database):
+        print(showMenuPrompt)
+        showMenu = pyi.inputInt(prompt="How much do you want to show? (number): ", min=1,max=3)
+
+        if showMenu == 1:
+                Show_All(database)
+        if showMenu == 2:
+                Find(database)
+
 
 
 def Add(database):
@@ -200,48 +240,75 @@ def Add(database):
         Adds new row to the end of the database with values
 
         """        
+        id_list = []
+        for idx, vals in list(database.items()):
+                if idx == "column":
+                        continue
+                elif vals[0] not in id_list:
+                        id_list.append(vals[0])
 
-        #Automatically determines index
-        Index = len(database)-1
+        print(addPrompt)
+        addPreCheck = pyi.inputInt(prompt="Do you want to add data to the database? (number): ",min=1,max=2)
 
-        #Asks for input
-        Project_Name = pyi.inputStr(
-                prompt="Enter the name of the project the employee is assigned to (Leave blank if none): ",
-                applyFunc=lambda x: x.title(),
-                blockRegexes=[r"[0-9]"],
-                default='N/A',
-                limit = 1
-        )
-        Job_Title = pyi.inputStr(
-                prompt="Enter the job title of the employee: ",
-                applyFunc=lambda x: x.title(),
-                blockRegexes=[r"[0-9]"],
-        )
-        FirstName = pyi.inputStr(
-                prompt="Enter the first name of the employee: ",
-                applyFunc=lambda x: x.title(),
-                blockRegexes=[r"[0-9]"],
-        )
-        LastName = pyi.inputStr(
-                prompt="Enter the last name of the employee: ",
-                applyFunc=lambda x: x.title(),
-                blockRegexes=[r"[0-9]"],
-        )
-        Sex = pyi.inputChoice(
-                choices=["M","F"],
-                prompt="Enter the sex of the employee: "
-        )
-        Age = pyi.inputInt(
-                prompt="Enter the age of the employee: "
-        )
+        if addPreCheck == 1:
 
-        #Adds the data to the dictionary
-        database.update(
-                {Index: [Index, Project_Name, Job_Title, FirstName, LastName, Sex, Age]}
-        )
+                #Automatically determines Employee ID
+                Emp_ID = pyi.inputInt(prompt="Enter the ID of the employee: ",min=0)
+                if Emp_ID in id_list:
+                        print("Employee ID is already being used.")
+                else:   
+                        tempsave_data = {}
 
-        #Shows the database
-        Show(database)
+                        #Asks for input
+                        Project_Name = pyi.inputStr(
+                                prompt="Enter the name of the project the employee is assigned to (Leave blank if none): ",
+                                applyFunc=lambda x: x.title(),
+                                blockRegexes=[r"[0-9]"],
+                                default='N/A',
+                                limit = 1
+                        )
+                        Job_Title = pyi.inputStr(
+                                prompt="Enter the job title of the employee: ",
+                                applyFunc=lambda x: x.title(),
+                                blockRegexes=[r"[0-9]"],
+                        )
+                        FirstName = pyi.inputStr(
+                                prompt="Enter the first name of the employee: ",
+                                applyFunc=lambda x: x.title(),
+                                blockRegexes=[r"[0-9]"],
+                        )
+                        LastName = pyi.inputStr(
+                                prompt="Enter the last name of the employee: ",
+                                applyFunc=lambda x: x.title(),
+                                blockRegexes=[r"[0-9]"],
+                        )
+                        Sex = pyi.inputChoice(
+                                choices=["M","F"],
+                                prompt="Enter the sex of the employee: "
+                        )
+                        Age = pyi.inputInt(
+                                prompt="Enter the age of the employee: "
+                        )
+
+                        tempsave_data.update({"column":database["column"]})
+                        tempsave_data.update({Emp_ID: [Emp_ID, Project_Name, Job_Title, FirstName, LastName, Sex, Age]})
+
+                        print("New Record: ")
+                        print(tbt.tabulate(list(tempsave_data.values())[1:],tempsave_data["column"],tablefmt="outline"))
+
+                        addCheck = pyi.inputYesNo(prompt="Are you sure you want to save this data? (yes/no) ") 
+                        if addCheck == 'yes':
+                                #Adds the data to the dictionary
+                                database.update(
+                                        {Emp_ID: [Emp_ID, Project_Name, Job_Title, FirstName, LastName, Sex, Age]}
+                                )
+
+                                print("Data saved.")
+                        else:
+                                Add(database)
+
+                        #Shows the database
+                        Show_All(database)
 
         #Back to menu
         return database
@@ -249,21 +316,21 @@ def Add(database):
 def Delete(database):
         """
 
-        Function that deletes a record from the database by matching their index
+        Function that deletes a record from the database by matching their employee id
 
         """        
 
         #Shows user the database 
-        Show(database)
+        Show_All(database)
 
-        #Asks user for which record to delete with their index
-        targetIndex = pyi.inputInt(prompt="Enter the index of the record you want to remove: ",max=(len(database)-2))
+        #Asks user for which record to delete with their Emp_ID
+        targetID = pyi.inputInt(prompt="Enter the employee ID of the record you want to remove: ",max=(len(database)-2))
 
         #If the index is actually valid, proceeds
-        if targetIndex <= len(database)-2:
+        if targetID <= len(database)-2:
 
                 #Shows record that is to be deleted
-                print(database[targetIndex])
+                print(database[targetID])
 
                 #Makes sure user wants to delete the record
                 removeCheck = pyi.inputYesNo(prompt="Are you sure you want to remove this record? (yes/no): ")
@@ -278,26 +345,19 @@ def Delete(database):
                                         continue
                                 
                                 #Delete the data matching the index
-                                if targetIndex == val[0]:
-                                        del database[idx]
-                                
-                                #Readjusts the indexes in the data to be accurate still, if the data deleted was lower index than them
-                                elif targetIndex < val[0]:
-                                        val[0] = idx-1
-                                        print(idx,val)
-                                        database.update({f"{idx}": val})
+                                if targetID == val[0]:
                                         del database[idx]
 
                         #Shows database after deletion
-                        Show(database)
+                        Show_All(database)
         #If data isnt actually valid
         else:
-                #Returns prompt informing user the index is invalid
-                print(f"Record with index of {targetIndex} is not in the database.")
+                #Returns prompt informing user the employee ID is invalid
+                print(f"Record with Emp_ID of {targetID} is not in the database.")
 
 def specificUpdate(database):
         """
-        Function that updates one specific value of the database based on their index
+        Function that updates one specific value of the database based on their employee ID
         
         Args:
             database (Dict): Database to be updated
@@ -312,8 +372,8 @@ def specificUpdate(database):
         #If they dont choose to cancel...
         if specifyUpdate != 7 :
 
-                #Ask the user what is the index of the record they want to change
-                specifyIndex = pyi.inputInt(prompt="Index of record to be updated: ")
+                #Ask the user what is the ID of the record they want to change
+                specifyID = pyi.inputInt(prompt="ID of record to be updated: ")
 
                 #Define the dictionaries to be used for comparing the data before and after the change
                 oldRecord = {}
@@ -328,7 +388,7 @@ def specificUpdate(database):
                                 continue
                         
                         #If the data is actually the one the user wants
-                        if i == specifyIndex:
+                        if i == specifyID:
 
                                 #First, updates the old record with the data before being altered
                                 oldRecord.update({i:v})
@@ -361,7 +421,7 @@ def specificUpdate(database):
 
 def rowUpdate(database):
         """
-        Function that updates an entire record (except index) from the database
+        Function that updates an entire record (except ID) from the database
 
         Args:
             database (Dict): Database to be updated
@@ -374,7 +434,7 @@ def rowUpdate(database):
         if rowUpdateCheck == 'yes':
 
                 #Ask which record to be updated
-                specifyIndex = pyi.inputInt(prompt="Index of record to be updated: ",max=(len(database)-2))
+                specifyID = pyi.inputInt(prompt="ID of record to be updated: ",max=(len(database)-2))
 
                 #Define the comparison records
                 oldRecord = {}
@@ -393,7 +453,7 @@ def rowUpdate(database):
                                 continue
 
                         #If it's the record the user wants...
-                        if i == specifyIndex:
+                        if i == specifyID:
 
                                 #Creates a copy and shows current record before any changes
                                 oldRecord.update({i:v})
@@ -403,7 +463,7 @@ def rowUpdate(database):
                                 #Iterates through the row
                                 for indx, field in enumerate(v):
 
-                                        #Skips index of record
+                                        #Skips ID of record
                                         if indx == 0:
                                                 continue
                                         #Asks the user what they want to change the record to, with the default being the old values
@@ -480,7 +540,6 @@ def columnUpdate(database):
                 #User chooses which value to edit
                 updateColumnSpecify = pyi.inputInt(prompt="Enter value to be edited (number): ",min=1,max=(len(uniqueValueList)))
 
-                #If they didnt choose cancel...
                 if updateColumnSpecify != (len(uniqueValueList)):
 
                         #Defines a variable by indexing from the value list
@@ -530,7 +589,7 @@ def Update(database):
         """        
 
         #Show all of the database to the user
-        Show(database)
+        Show_All(database)
 
         #Show user the options they have for editing the database
         print(updateMenuPrompt)
